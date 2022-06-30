@@ -184,7 +184,7 @@
 </li>
 </ul>
 <!-- Created by https://github.com/ekalinin/github-markdown-toc -->
-<!-- Added by: kuanhsiaokuo, at: Thu Jun 30 11:12:02 CST 2022 -->
+<!-- Added by: kuanhsiaokuo, at: Thu Jun 30 23:34:22 CST 2022 -->
 <!--te-->
 <h2 id="关于pythontutor嵌入"><a class="header" href="#关于pythontutor嵌入">关于pythontutor嵌入</a></h2>
 <blockquote>
@@ -198,16 +198,168 @@
 <ul>
 <li><a href="layer5_ecosystem/5_open_source/1_underlying/os/pythontutor_anatomy.html#pythontutor%E9%A1%B9%E7%9B%AE%E8%A7%A3%E5%89%96">pythontutor项目解剖</a>
 <ul>
+<li><a href="layer5_ecosystem/5_open_source/1_underlying/os/pythontutor_anatomy.html#%E4%BD%BF%E7%94%A8bottle%E5%86%99web%E6%9C%8D%E5%8A%A1">使用bottle写web服务</a></li>
+<li><a href="layer5_ecosystem/5_open_source/1_underlying/os/pythontutor_anatomy.html#pg_loggerpy%E4%BB%8B%E7%BB%8D">pg_logger.py介绍</a>
+<ul>
+<li><a href="layer5_ecosystem/5_open_source/1_underlying/os/pythontutor_anatomy.html#%E7%BB%A7%E6%89%BF%E8%87%AAbdb">继承自Bdb</a></li>
+<li><a href="layer5_ecosystem/5_open_source/1_underlying/os/pythontutor_anatomy.html#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3">初始化相关</a></li>
+<li><a href="layer5_ecosystem/5_open_source/1_underlying/os/pythontutor_anatomy.html#%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0">调用函数</a></li>
+</ul>
+</li>
 <li><a href="layer5_ecosystem/5_open_source/1_underlying/os/pythontutor_anatomy.html#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99">参考资料</a></li>
 </ul>
 </li>
 </ul>
 <!-- Created by https://github.com/ekalinin/github-markdown-toc -->
-<!-- Added by: kuanhsiaokuo, at: Thu Jun 30 11:12:30 CST 2022 -->
+<!-- Added by: kuanhsiaokuo, at: Thu Jun 30 23:34:51 CST 2022 -->
 <!--te-->
+<h2 id="使用bottle写web服务"><a class="header" href="#使用bottle写web服务">使用bottle写web服务</a></h2>
+<pre><code class="language-python">from bottle import route, get, request, run, template, static_file
+
+try:
+    import StringIO  # NB: don't use cStringIO since it doesn't support unicode!!!
+except:
+    import io as StringIO  # py3
+import json
+import pg_logger
+
+
+@route('/web_exec_&lt;name:re:.+&gt;.py')
+@route('/LIVE_exec_&lt;name:re:.+&gt;.py')
+@route('/viz_interaction.py')
+@route('/syntax_err_survey.py')
+@route('/runtime_err_survey.py')
+@route('/eureka_survey.py')
+@route('/error_log.py')
+def dummy_ok(name=None):
+    return 'OK'
+
+
+@route('/&lt;filepath:path&gt;')
+def index(filepath):
+    return static_file(filepath, root='.')
+
+
+# Note that this will run either Python 2 or 3, depending on which
+# version of Python you used to start the server, REGARDLESS of which
+# route was taken:
+@route('/web_exec_py2.py')
+@route('/web_exec_py3.py')
+@route('/LIVE_exec_py2.py')
+@route('/LIVE_exec_py3.py')
+def get_py_exec():
+    out_s = StringIO.StringIO()
+
+    def json_finalizer(input_code, output_trace):
+        ret = dict(code=input_code, trace=output_trace)
+        json_output = json.dumps(ret, indent=None)
+        out_s.write(json_output)
+
+    options = json.loads(request.query.options_json)
+
+    pg_logger.exec_script_str_local(request.query.user_script,
+                                    request.query.raw_input_json,
+                                    options['cumulative_mode'],
+                                    options['heap_primitives'],
+                                    json_finalizer)
+
+    return out_s.getvalue()
+
+
+if __name__ == &quot;__main__&quot;:
+    run(host='localhost', port=8003, reloader=True)
+</code></pre>
+<blockquote>
+<p>这里可以发现，作者的路由基本汇聚在get_py_exec, 进入后执行exec_script_str_local</p>
+</blockquote>
+<h2 id="pg_loggerpy介绍"><a class="header" href="#pg_loggerpy介绍">pg_logger.py介绍</a></h2>
+<div id="admonition-python-tutor核心类" class="admonition info">
+<div class="admonition-title">
+<p>python tutor核心类</p>
+<p><a class="admonition-anchor-link" href="layer5_ecosystem/5_open_source/1_underlying/os/pythontutor_anatomy.html#admonition-python-tutor核心类"></a></p>
+</div>
+<div>
+<pre><code>┌───────────────────┐                                                        
+│                   │                                                        
+│ botter_server.py  │                                                        
+│    get_py_exec    │──────────────┐                                         
+│                   │              │                                         
+└───────────────────┘              │                                         
+                                   │                                         
+                                   │              ┌─────────────────────────┐
+                                   └──────────────▶                         │
+                                                  │      pg_logger.py       │
+                                                  │  exec_script_str_local  │
+                                      ┌───────────┤                         │
+                                      │           └─────────────────────────┘
+                                      │                                      
+                                      │                                      
+                                      │                                      
+┌─────────────────────────┐           │                                      
+│                         ◀───────────┘                                      
+│      pg_logger.py       │                                                  
+│   PGLogger._runscript   │                                                  
+│                         │                                                  
+└─────────────────────────┘                                                  
+</code></pre>
+</div>
+</div>
+<h3 id="继承自bdb"><a class="header" href="#继承自bdb">继承自Bdb</a></h3>
+<pre><code class="language-python">class PGLogger(bdb.Bdb):
+</code></pre>
+<h3 id="初始化相关"><a class="header" href="#初始化相关">初始化相关</a></h3>
+<pre><code class="language-python">    def __init__(
+            self,
+            cumulative_mode,
+            heap_primitives,
+            show_only_outputs,
+            finalizer_func,
+            disable_security_checks=False,
+            allow_all_modules=False,
+            crazy_mode=False,
+            custom_modules=None,
+            separate_stdout_by_module=False,
+            probe_exprs=None):
+</code></pre>
+<h3 id="调用函数"><a class="header" href="#调用函数">调用函数</a></h3>
+<pre><code class="language-python">def exec_script_str_local(
+        script_str,
+        raw_input_lst_json,
+        cumulative_mode,
+        heap_primitives,
+        finalizer_func,
+        probe_exprs=None,
+        allow_all_modules=False):
+    # 核心运行过程记录类
+    logger = PGLogger(
+        cumulative_mode,
+        heap_primitives,
+        False,
+        finalizer_func,
+        disable_security_checks=True,
+        allow_all_modules=allow_all_modules,
+        probe_exprs=probe_exprs
+    )
+
+    # TODO: refactor these NOT to be globals
+    global input_string_queue
+    input_string_queue = []
+    if raw_input_lst_json:
+        # TODO: if we want to support unicode, remove str() cast
+        input_string_queue = [str(e) for e in json.loads(raw_input_lst_json)]
+
+    try:
+        logger._runscript(script_str)
+    except bdb.BdbQuit:
+        pass
+    finally:
+        return logger.finalize()
+</code></pre>
 <h2 id="参考资料"><a class="header" href="#参考资料">参考资料</a></h2>
 <ul>
 <li><a href="https://github.com/KuanHsiaoKuo/OnlinePythonTutor">KuanHsiaoKuo/OnlinePythonTutor</a></li>
+<li><a href="https://github.com/KuanHsiaoKuo/PythonTutorService">KuanHsiaoKuo/PythonTutorService: 基于OnlinePythonTutor开源项目进行改写</a></li>
+<li><a href="layer5_ecosystem/5_open_source/1_underlying/os//layer1_underlying_abstract/3_language_grammar/code_quality.html">bdb与pdb介绍</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="checklist"><a class="header" href="#checklist">Checklist</a></h1>
 
