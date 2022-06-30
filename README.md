@@ -3,6 +3,12 @@
 写python如烹小鲜
 
 <!--ts-->
+* [Python-Cooker](#python-cooker)
+   * [关于pythontutor嵌入](#关于pythontutor嵌入)
+
+<!-- Created by https://github.com/ekalinin/github-markdown-toc -->
+<!-- Added by: kuanhsiaokuo, at: Thu Jun 30 11:12:02 CST 2022 -->
+
 <!--te-->
 
 ## 关于pythontutor嵌入
