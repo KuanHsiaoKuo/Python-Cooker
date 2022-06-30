@@ -1,4 +1,5 @@
 - [总览](../README.md)
+    - [Pythontutor解剖](layer5_ecosystem/5_open_source/1_underlying/os/pythontutor_anatomy.md)
 - [Layer1: 底层抽象](./layer1_underlying_abstract/layer1_underlying_abstract.md)
     - [虚拟内存管理](./layer1_underlying_abstract/1_virtual_memory/virtual_memory.md)
     - [类型系统](./layer1_underlying_abstract/2_type_system/type_system.md)
@@ -42,6 +43,7 @@
             - [数据处理](layer5_ecosystem/5_open_source/1_underlying/data/data.md)
             - [嵌入式](layer5_ecosystem/5_open_source/1_underlying/embedded/embedded.md)
             - [系统开发](layer5_ecosystem/5_open_source/1_underlying/os/os.md)
+                - [Pythontutor解剖](layer5_ecosystem/5_open_source/1_underlying/os/pythontutor_anatomy.md)
             - [性能工具](layer5_ecosystem/5_open_source/1_underlying/performance/performance.md)
         - [网络相关](layer5_ecosystem/5_open_source/2_network/network.md)
             - [云原生](layer5_ecosystem/5_open_source/2_network/cloud/cloud.md)
