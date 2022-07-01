@@ -177,12 +177,16 @@
 <ul>
 <li><a href="#pythontutor%E9%A1%B9%E7%9B%AE%E8%A7%A3%E5%89%96">pythontutor项目解剖</a>
 <ul>
+<li><a href="#%E8%AF%B4%E6%98%8E">说明</a></li>
+<li><a href="#%E6%80%BB%E4%BD%93%E7%BB%93%E6%9E%84%E5%9B%BE">总体结构图</a></li>
+<li><a href="#iframe%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B">iframe使用示例</a></li>
 <li><a href="#%E4%BD%BF%E7%94%A8bottle%E5%86%99web%E6%9C%8D%E5%8A%A1">使用bottle写web服务</a></li>
 <li><a href="#pg_loggerpy%E4%BB%8B%E7%BB%8D">pg_logger.py介绍</a>
 <ul>
 <li><a href="#%E7%BB%A7%E6%89%BF%E8%87%AAbdb">继承自Bdb</a></li>
 <li><a href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3">初始化相关</a></li>
 <li><a href="#%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0">调用函数</a></li>
+<li><a href="#%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE%E7%A4%BA%E4%BE%8B">返回数据示例</a></li>
 </ul>
 </li>
 <li><a href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99">参考资料</a></li>
@@ -190,8 +194,88 @@
 </li>
 </ul>
 <!-- Created by https://github.com/ekalinin/github-markdown-toc -->
-<!-- Added by: kuanhsiaokuo, at: Thu Jun 30 23:34:51 CST 2022 -->
+<!-- Added by: kuanhsiaokuo, at: Fri Jul  1 10:38:44 CST 2022 -->
 <!--te-->
+<h2 id="说明"><a class="header" href="#说明">说明</a></h2>
+<p>本文主要剖析一下pythontutor的项目结构与业务流程，并确定后面的相关代码可视化的使用方法</p>
+<h2 id="总体结构图"><a class="header" href="#总体结构图">总体结构图</a></h2>
+<div id="admonition-pythontutor结构图" class="admonition info">
+<div class="admonition-title">
+<p>pythontutor结构图</p>
+<p><a class="admonition-anchor-link" href="#admonition-pythontutor结构图"></a></p>
+</div>
+<div>
+<pre><code>                                                                                                                                                  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+                                                                                                                                                  ┃                              _                    _                            ┃ 
+                                                                                                                                                  ┃                _ __  __ _ __| |____ _ __ _ ___   (_)___ ___ _ _                ┃ 
+                                                                                                                                                  ┃               | '_ \/ _` / _| / / _` / _` / -_)_ | (_-&lt;/ _ \ ' \               ┃ 
+                                                                                                                                                  ┃               | .__/\__,_\__|_\_\__,_\__, \___(_)/ /__/\___/_||_|              ┃ 
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓                                                               ┃               |_|                    |___/     |__/                            ┃ 
+┃       ___      _   _               _____     _             ___                  ┃                                                               ┃                                                                                ┃ 
+┃      | _ \_  _| |_| |_  ___ _ _   |_   _|  _| |_ ___ _ _  | __|_ _____ __       ┃                                                               ┃   {                                                                            ┃ 
+┃      |  _/ || |  _| ' \/ _ \ ' \    | || || |  _/ _ \ '_| | _|\ \ / -_) _|      ┃                                                               ┃     &quot;name&quot;: &quot;v5-unity&quot;,                                                        ┃ 
+┃      |_|  \_, |\__|_||_\___/_||_|   |_| \_,_|\__\___/_|   |___/_\_\___\__|      ┃                                                               ┃     &quot;version&quot;: &quot;1.0.0&quot;,                                                        ┃ 
+┃           |__/                                                                  ┃                                                               ┃     &quot;description&quot;: &quot;OPT v5&quot;,                                                   ┃ 
+┃                                                                                 ┃                                                               ┃     &quot;main&quot;: &quot;bundle.js&quot;,                                                       ┃ 
+┃                                                                                 ┃                                                               ┃     &quot;repository&quot;: &quot;https://github.com/pgbovine/OnlinePythonTutor&quot;,             ┃ 
+┃                                                                                 ┃                                                               ┃     &quot;license&quot;: &quot;BSD-3-Clause&quot;,                                                 ┃ 
+┃                                                                                 ┃                                                               ┃     &quot;scripts&quot;: {                                                               ┃ 
+┃  ┌────────────────────────┐                                                     ┃                                                               ┃       &quot;start&quot;: &quot;python bottle_server.py&quot;,                                      ┃ 
+┃  │                        │                                                     ┃                                                               ┃       &quot;py3start&quot;: &quot;python3 bottle_server.py&quot;,                                  ┃ 
+┃  │    botter_server.py    │                                                     ┃                                                     ┌─────────┫       &quot;webpack&quot;: &quot;webpack --devtool sourcemap --progress --colors --watch&quot;,    ┃ 
+┃  │      get_py_exec       │────────────┐                                        ┃                                                     │         ┃       &quot;production-build&quot;: &quot;rm -f build/* &amp;&amp; webpack &amp;&amp; python                  ┃ 
+┃  │                        │            │                                        ┃                                                     │         ┃   add_cache_busting_query_strings.py&quot;                                          ┃ 
+┃  └────────────────────────┘            │                                        ┃                                                     │         ┃     },                                                                         ┃ 
+┃                                        │                                        ┃                                                     │         ┃     &quot;dependencies&quot;: {                                                          ┃ 
+┃                                        │           ┌─────────────────────────┐  ┃                                                     │         ┃       &quot;css-loader&quot;: &quot;&quot;,                                                        ┃ 
+┃                                        └───────────▶                         │  ┃                                   npm run production-build    ┃       &quot;fs-extra&quot;: &quot;^6.0.1&quot;,                                                    ┃ 
+┃                                                    │      pg_logger.py       │  ┃                                                     │         ┃       &quot;json-stable-stringify&quot;: &quot;^1.0.1&quot;,                                       ┃ 
+┃                                                    │  exec_script_str_local  │  ┃                                                     │         ┃       &quot;on-build-webpack&quot;: &quot;^0.1.0&quot;,                                            ┃ 
+┃                                        ┌───────────┤                         │  ┃                                                     │         ┃       &quot;pixelmatch&quot;: &quot;^4.0.2&quot;,                                                  ┃ 
+┃                                        │           └─────────────────────────┘  ┃                  ┌─────────────────────────┐        │         ┃       &quot;puppeteer&quot;: &quot;^1.5.0&quot;,                                                   ┃ 
+┃                                        │                                        ┃                  │                         │        │         ┃       &quot;script-loader&quot;: &quot;&quot;,                                                     ┃ 
+┃                                        │                                        ┃                  │     /visualize.html     │        │         ┃       &quot;style-loader&quot;: &quot;&quot;,                                                      ┃ 
+┃                                        │                       ┌────────────────╋──────────────────▶   visualize.bundle.js   ◀────────┘         ┃       &quot;ts-loader&quot;: &quot;^3.5.0&quot;,                                                   ┃ 
+┃  ┌─────────────────────────┐           │                       │                ┃                  │                         │                  ┃       &quot;url-loader&quot;: &quot;&quot;                                                         ┃ 
+┃  │                         ◀───────────┘               return trace info        ┃                  └─────────────────────────┘                  ┃     }                                                                          ┃ 
+┃  │      pg_logger.py       │                         {code: '', trace: []}      ┃                                                               ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━▲━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ 
+┃  │   PGLogger._runscript   │                                   │                ┃                                                                                                       │                                          
+┃  │                         ├───────────────────────────────────┘                ┃                                                                                                       │                                          
+┃  └─────────────────────────┘                                                    ┃                                                                                                   webpack                                        
+┃                                                                                 ┃                                                                                                       │                                          
+┃                                                                                 ┃                                                                                                       │                                          
+┃                                                                                 ┃                                                                ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                                                 ┃                                                                ┃                  _                  _                  __ _         _          ┃
+┃                                                                                 ┃                                                                ┃      __ __ _____| |__ _ __  __ _ __| |__  __ ___ _ _  / _(_)__ _   (_)___      ┃
+┃                                                                                 ┃                                                                ┃      \ V  V / -_) '_ \ '_ \/ _` / _| / /_/ _/ _ \ ' \|  _| / _` |_ | (_-&lt;      ┃
+┃                                                                                 ┃                                                                ┃       \_/\_/\___|_.__/ .__/\__,_\__|_\_(_)__\___/_||_|_| |_\__, (_)/ /__/      ┃
+┃                                                                                 ┃                                                                ┃                      |_|                                   |___/ |__/          ┃
+┃                                                                                 ┃                                                                ┃   entry: {                                                                     ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛                                                                ┃       'visualize': &quot;./js/visualize.ts&quot;,                                        ┃
+                                                                                                                                                   ┃       'recorder': &quot;./js/recorder.ts&quot;,                                          ┃
+                                                                                                                                                   ┃       'render-trace': &quot;./js/render-trace.ts&quot;,                                  ┃
+                                                                                                                                                   ┃       'opt-live': &quot;./js/opt-live.ts&quot;,                                          ┃
+                                                                                                                                                   ┃       'iframe-embed': &quot;./js/iframe-embed.ts&quot;,                                  ┃
+                                                                                                                                                   ┃       'index': &quot;./js/index.ts&quot;,                                                ┃
+                                                                                                                                                   ┃       'composingprograms': &quot;./js/composingprograms.ts&quot;,                        ┃
+                                                                                                                                                   ┃       'csc108h': &quot;./js/csc108h.ts&quot;,                                            ┃
+                                                                                                                                                   ┃       'pytutor-embed': &quot;./js/pytutor-embed.ts&quot;,                                ┃
+                                                                                                                                                   ┃   },                                                                           ┃
+                                                                                                                                                   ┃                                                                                ┃
+                                                                                                                                                   ┃   output: {                                                                    ┃
+                                                                                                                                                   ┃       path: __dirname + &quot;/build/&quot;,                                             ┃
+                                                                                                                                                   ┃       // TODO: use 'bundle.[hash].js' for fingerprint hashing                  ┃
+                                                                                                                                                   ┃       // to create unique filenames for releases:                              ┃
+                                                                                                                                                   ┃       // https://webpack.github.io/docs/long-term-caching.html                 ┃
+                                                                                                                                                   ┃       filename: &quot;[name].bundle.js&quot;,                                            ┃
+                                                                                                                                                   ┃       sourceMapFilename: &quot;[file].map&quot;,                                         ┃
+                                                                                                                                                   ┃   },                                                                           ┃
+                                                                                                                                                   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+</code></pre>
+</div>
+</div>
+<h2 id="iframe使用示例"><a class="header" href="#iframe使用示例">iframe使用示例</a></h2>
+<iframe width="950" height="500" frameborder="0" src="https://pythontutor.com/iframe-embed.html#code=%23%20The%20__init__%20'constructor'%20-%20object-oriented%20programming%20intro%0A%23%20Adapted%20from%20MIT%206.01%20course%20notes%20%28Section%203.5%29%0A%23%20http%3A//mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf%0A%0Aclass%20Staff601%3A%0A%20%20%20%20course%20%3D%20'6.01'%0A%20%20%20%20building%20%3D%2034%0A%20%20%20%20room%20%3D%20501%0A%0A%20%20%20%20def%20__init__%28self,%20name,%20role,%20years,%20salary%29%3A%0A%20%20%20%20%20%20self.name%20%3D%20name%0A%20%20%20%20%20%20self.role%20%3D%20role%0A%20%20%20%20%20%20self.age%20%3D%20years%0A%20%20%20%20%20%20self.salary%20%3D%20salary%0A%0A%20%20%20%20def%20salutation%28self%29%3A%0A%20%20%20%20%20%20%20%20return%20self.role%20%2B%20'%20'%20%2B%20self.name%0A%0Apat%20%3D%20Staff601%28'Pat',%20'Professor',%2060,%20100000%29%0Aprint%28pat.salutation%28%29%29&codeDivHeight=400&codeDivWidth=350&cumulative=false&curInstr=3&heapPrimitives=nevernest&origin=opt-frontend.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false"> </iframe>
 <h2 id="使用bottle写web服务"><a class="header" href="#使用bottle写web服务">使用bottle写web服务</a></h2>
 <pre><code class="language-python">from bottle import route, get, request, run, template, static_file
 
@@ -334,11 +418,662 @@ if __name__ == &quot;__main__&quot;:
     finally:
         return logger.finalize()
 </code></pre>
+<h3 id="返回数据示例"><a class="header" href="#返回数据示例">返回数据示例</a></h3>
+<pre><code class="language-json lines">{
+  &quot;code&quot;: &quot;# The __init__ 'constructor' - object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def __init__(self, name, role, years, salary):\n      self.name = name\n      self.role = role\n      self.age = years\n      self.salary = salary\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Staff601('Pat', 'Professor', 60, 100000)\nprint(pat.salutation())&quot;,
+  &quot;trace&quot;: [
+    {
+      &quot;line&quot;: 5,
+      &quot;event&quot;: &quot;step_line&quot;,
+      &quot;func_name&quot;: &quot;&lt;module&gt;&quot;,
+      &quot;globals&quot;: {},
+      &quot;ordered_globals&quot;: [],
+      &quot;stack_to_render&quot;: [],
+      &quot;heap&quot;: {},
+      &quot;stdout&quot;: &quot;# The __init__ 'constructor' - object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def __init__(self, name, role, years, salary):\n      self.name = name\n      self.role = role\n      self.age = years\n      self.salary = salary\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Staff601('Pat', 'Professor', 60, 100000)\nprint(pat.salutation())\n&quot;
+    },
+    {
+      &quot;line&quot;: 19,
+      &quot;event&quot;: &quot;step_line&quot;,
+      &quot;func_name&quot;: &quot;&lt;module&gt;&quot;,
+      &quot;globals&quot;: {
+        &quot;Staff601&quot;: [
+          &quot;IMPORTED_FAUX_PRIMITIVE&quot;,
+          &quot;imported class&quot;
+        ]
+      },
+      &quot;ordered_globals&quot;: [
+        &quot;Staff601&quot;
+      ],
+      &quot;stack_to_render&quot;: [],
+      &quot;heap&quot;: {},
+      &quot;stdout&quot;: &quot;# The __init__ 'constructor' - object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def __init__(self, name, role, years, salary):\n      self.name = name\n      self.role = role\n      self.age = years\n      self.salary = salary\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Staff601('Pat', 'Professor', 60, 100000)\nprint(pat.salutation())\n&quot;
+    },
+    {
+      &quot;line&quot;: 10,
+      &quot;event&quot;: &quot;call&quot;,
+      &quot;func_name&quot;: &quot;__init__&quot;,
+      &quot;globals&quot;: {
+        &quot;Staff601&quot;: [
+          &quot;IMPORTED_FAUX_PRIMITIVE&quot;,
+          &quot;imported class&quot;
+        ]
+      },
+      &quot;ordered_globals&quot;: [
+        &quot;Staff601&quot;
+      ],
+      &quot;stack_to_render&quot;: [
+        {
+          &quot;func_name&quot;: &quot;__init__&quot;,
+          &quot;is_parent&quot;: false,
+          &quot;frame_id&quot;: 1,
+          &quot;parent_frame_id_list&quot;: [],
+          &quot;encoded_locals&quot;: {
+            &quot;self&quot;: [
+              &quot;REF&quot;,
+              1
+            ],
+            &quot;name&quot;: &quot;Pat&quot;,
+            &quot;role&quot;: &quot;Professor&quot;,
+            &quot;years&quot;: 60,
+            &quot;salary&quot;: 100000
+          },
+          &quot;ordered_varnames&quot;: [
+            &quot;self&quot;,
+            &quot;name&quot;,
+            &quot;role&quot;,
+            &quot;years&quot;,
+            &quot;salary&quot;
+          ],
+          &quot;is_zombie&quot;: false,
+          &quot;is_highlighted&quot;: true,
+          &quot;unique_hash&quot;: &quot;__init___f1&quot;
+        }
+      ],
+      &quot;heap&quot;: {
+        &quot;1&quot;: [
+          &quot;INSTANCE&quot;,
+          &quot;Staff601&quot;
+        ]
+      },
+      &quot;stdout&quot;: &quot;# The __init__ 'constructor' - object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def __init__(self, name, role, years, salary):\n      self.name = name\n      self.role = role\n      self.age = years\n      self.salary = salary\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Staff601('Pat', 'Professor', 60, 100000)\nprint(pat.salutation())\n&quot;
+    },
+    {
+      &quot;line&quot;: 11,
+      &quot;event&quot;: &quot;step_line&quot;,
+      &quot;func_name&quot;: &quot;__init__&quot;,
+      &quot;globals&quot;: {
+        &quot;Staff601&quot;: [
+          &quot;IMPORTED_FAUX_PRIMITIVE&quot;,
+          &quot;imported class&quot;
+        ]
+      },
+      &quot;ordered_globals&quot;: [
+        &quot;Staff601&quot;
+      ],
+      &quot;stack_to_render&quot;: [
+        {
+          &quot;func_name&quot;: &quot;__init__&quot;,
+          &quot;is_parent&quot;: false,
+          &quot;frame_id&quot;: 1,
+          &quot;parent_frame_id_list&quot;: [],
+          &quot;encoded_locals&quot;: {
+            &quot;self&quot;: [
+              &quot;REF&quot;,
+              1
+            ],
+            &quot;name&quot;: &quot;Pat&quot;,
+            &quot;role&quot;: &quot;Professor&quot;,
+            &quot;years&quot;: 60,
+            &quot;salary&quot;: 100000
+          },
+          &quot;ordered_varnames&quot;: [
+            &quot;self&quot;,
+            &quot;name&quot;,
+            &quot;role&quot;,
+            &quot;years&quot;,
+            &quot;salary&quot;
+          ],
+          &quot;is_zombie&quot;: false,
+          &quot;is_highlighted&quot;: true,
+          &quot;unique_hash&quot;: &quot;__init___f1&quot;
+        }
+      ],
+      &quot;heap&quot;: {
+        &quot;1&quot;: [
+          &quot;INSTANCE&quot;,
+          &quot;Staff601&quot;
+        ]
+      },
+      &quot;stdout&quot;: &quot;# The __init__ 'constructor' - object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def __init__(self, name, role, years, salary):\n      self.name = name\n      self.role = role\n      self.age = years\n      self.salary = salary\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Staff601('Pat', 'Professor', 60, 100000)\nprint(pat.salutation())\n&quot;
+    },
+    {
+      &quot;line&quot;: 12,
+      &quot;event&quot;: &quot;step_line&quot;,
+      &quot;func_name&quot;: &quot;__init__&quot;,
+      &quot;globals&quot;: {
+        &quot;Staff601&quot;: [
+          &quot;IMPORTED_FAUX_PRIMITIVE&quot;,
+          &quot;imported class&quot;
+        ]
+      },
+      &quot;ordered_globals&quot;: [
+        &quot;Staff601&quot;
+      ],
+      &quot;stack_to_render&quot;: [
+        {
+          &quot;func_name&quot;: &quot;__init__&quot;,
+          &quot;is_parent&quot;: false,
+          &quot;frame_id&quot;: 1,
+          &quot;parent_frame_id_list&quot;: [],
+          &quot;encoded_locals&quot;: {
+            &quot;self&quot;: [
+              &quot;REF&quot;,
+              1
+            ],
+            &quot;name&quot;: &quot;Pat&quot;,
+            &quot;role&quot;: &quot;Professor&quot;,
+            &quot;years&quot;: 60,
+            &quot;salary&quot;: 100000
+          },
+          &quot;ordered_varnames&quot;: [
+            &quot;self&quot;,
+            &quot;name&quot;,
+            &quot;role&quot;,
+            &quot;years&quot;,
+            &quot;salary&quot;
+          ],
+          &quot;is_zombie&quot;: false,
+          &quot;is_highlighted&quot;: true,
+          &quot;unique_hash&quot;: &quot;__init___f1&quot;
+        }
+      ],
+      &quot;heap&quot;: {
+        &quot;1&quot;: [
+          &quot;INSTANCE&quot;,
+          &quot;Staff601&quot;,
+          [
+            &quot;name&quot;,
+            &quot;Pat&quot;
+          ]
+        ]
+      },
+      &quot;stdout&quot;: &quot;# The __init__ 'constructor' - object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def __init__(self, name, role, years, salary):\n      self.name = name\n      self.role = role\n      self.age = years\n      self.salary = salary\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Staff601('Pat', 'Professor', 60, 100000)\nprint(pat.salutation())\n&quot;
+    },
+    {
+      &quot;line&quot;: 13,
+      &quot;event&quot;: &quot;step_line&quot;,
+      &quot;func_name&quot;: &quot;__init__&quot;,
+      &quot;globals&quot;: {
+        &quot;Staff601&quot;: [
+          &quot;IMPORTED_FAUX_PRIMITIVE&quot;,
+          &quot;imported class&quot;
+        ]
+      },
+      &quot;ordered_globals&quot;: [
+        &quot;Staff601&quot;
+      ],
+      &quot;stack_to_render&quot;: [
+        {
+          &quot;func_name&quot;: &quot;__init__&quot;,
+          &quot;is_parent&quot;: false,
+          &quot;frame_id&quot;: 1,
+          &quot;parent_frame_id_list&quot;: [],
+          &quot;encoded_locals&quot;: {
+            &quot;self&quot;: [
+              &quot;REF&quot;,
+              1
+            ],
+            &quot;name&quot;: &quot;Pat&quot;,
+            &quot;role&quot;: &quot;Professor&quot;,
+            &quot;years&quot;: 60,
+            &quot;salary&quot;: 100000
+          },
+          &quot;ordered_varnames&quot;: [
+            &quot;self&quot;,
+            &quot;name&quot;,
+            &quot;role&quot;,
+            &quot;years&quot;,
+            &quot;salary&quot;
+          ],
+          &quot;is_zombie&quot;: false,
+          &quot;is_highlighted&quot;: true,
+          &quot;unique_hash&quot;: &quot;__init___f1&quot;
+        }
+      ],
+      &quot;heap&quot;: {
+        &quot;1&quot;: [
+          &quot;INSTANCE&quot;,
+          &quot;Staff601&quot;,
+          [
+            &quot;name&quot;,
+            &quot;Pat&quot;
+          ],
+          [
+            &quot;role&quot;,
+            &quot;Professor&quot;
+          ]
+        ]
+      },
+      &quot;stdout&quot;: &quot;# The __init__ 'constructor' - object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def __init__(self, name, role, years, salary):\n      self.name = name\n      self.role = role\n      self.age = years\n      self.salary = salary\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Staff601('Pat', 'Professor', 60, 100000)\nprint(pat.salutation())\n&quot;
+    },
+    {
+      &quot;line&quot;: 14,
+      &quot;event&quot;: &quot;step_line&quot;,
+      &quot;func_name&quot;: &quot;__init__&quot;,
+      &quot;globals&quot;: {
+        &quot;Staff601&quot;: [
+          &quot;IMPORTED_FAUX_PRIMITIVE&quot;,
+          &quot;imported class&quot;
+        ]
+      },
+      &quot;ordered_globals&quot;: [
+        &quot;Staff601&quot;
+      ],
+      &quot;stack_to_render&quot;: [
+        {
+          &quot;func_name&quot;: &quot;__init__&quot;,
+          &quot;is_parent&quot;: false,
+          &quot;frame_id&quot;: 1,
+          &quot;parent_frame_id_list&quot;: [],
+          &quot;encoded_locals&quot;: {
+            &quot;self&quot;: [
+              &quot;REF&quot;,
+              1
+            ],
+            &quot;name&quot;: &quot;Pat&quot;,
+            &quot;role&quot;: &quot;Professor&quot;,
+            &quot;years&quot;: 60,
+            &quot;salary&quot;: 100000
+          },
+          &quot;ordered_varnames&quot;: [
+            &quot;self&quot;,
+            &quot;name&quot;,
+            &quot;role&quot;,
+            &quot;years&quot;,
+            &quot;salary&quot;
+          ],
+          &quot;is_zombie&quot;: false,
+          &quot;is_highlighted&quot;: true,
+          &quot;unique_hash&quot;: &quot;__init___f1&quot;
+        }
+      ],
+      &quot;heap&quot;: {
+        &quot;1&quot;: [
+          &quot;INSTANCE&quot;,
+          &quot;Staff601&quot;,
+          [
+            &quot;age&quot;,
+            60
+          ],
+          [
+            &quot;name&quot;,
+            &quot;Pat&quot;
+          ],
+          [
+            &quot;role&quot;,
+            &quot;Professor&quot;
+          ]
+        ]
+      },
+      &quot;stdout&quot;: &quot;# The __init__ 'constructor' - object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def __init__(self, name, role, years, salary):\n      self.name = name\n      self.role = role\n      self.age = years\n      self.salary = salary\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Staff601('Pat', 'Professor', 60, 100000)\nprint(pat.salutation())\n&quot;
+    },
+    {
+      &quot;line&quot;: 14,
+      &quot;event&quot;: &quot;return&quot;,
+      &quot;func_name&quot;: &quot;__init__&quot;,
+      &quot;globals&quot;: {
+        &quot;Staff601&quot;: [
+          &quot;IMPORTED_FAUX_PRIMITIVE&quot;,
+          &quot;imported class&quot;
+        ]
+      },
+      &quot;ordered_globals&quot;: [
+        &quot;Staff601&quot;
+      ],
+      &quot;stack_to_render&quot;: [
+        {
+          &quot;func_name&quot;: &quot;__init__&quot;,
+          &quot;is_parent&quot;: false,
+          &quot;frame_id&quot;: 1,
+          &quot;parent_frame_id_list&quot;: [],
+          &quot;encoded_locals&quot;: {
+            &quot;self&quot;: [
+              &quot;REF&quot;,
+              1
+            ],
+            &quot;name&quot;: &quot;Pat&quot;,
+            &quot;role&quot;: &quot;Professor&quot;,
+            &quot;years&quot;: 60,
+            &quot;salary&quot;: 100000,
+            &quot;__return__&quot;: null
+          },
+          &quot;ordered_varnames&quot;: [
+            &quot;self&quot;,
+            &quot;name&quot;,
+            &quot;role&quot;,
+            &quot;years&quot;,
+            &quot;salary&quot;,
+            &quot;__return__&quot;
+          ],
+          &quot;is_zombie&quot;: false,
+          &quot;is_highlighted&quot;: true,
+          &quot;unique_hash&quot;: &quot;__init___f1&quot;
+        }
+      ],
+      &quot;heap&quot;: {
+        &quot;1&quot;: [
+          &quot;INSTANCE&quot;,
+          &quot;Staff601&quot;,
+          [
+            &quot;age&quot;,
+            60
+          ],
+          [
+            &quot;name&quot;,
+            &quot;Pat&quot;
+          ],
+          [
+            &quot;role&quot;,
+            &quot;Professor&quot;
+          ],
+          [
+            &quot;salary&quot;,
+            100000
+          ]
+        ]
+      },
+      &quot;stdout&quot;: &quot;# The __init__ 'constructor' - object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def __init__(self, name, role, years, salary):\n      self.name = name\n      self.role = role\n      self.age = years\n      self.salary = salary\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Staff601('Pat', 'Professor', 60, 100000)\nprint(pat.salutation())\n&quot;
+    },
+    {
+      &quot;line&quot;: 20,
+      &quot;event&quot;: &quot;step_line&quot;,
+      &quot;func_name&quot;: &quot;&lt;module&gt;&quot;,
+      &quot;globals&quot;: {
+        &quot;Staff601&quot;: [
+          &quot;IMPORTED_FAUX_PRIMITIVE&quot;,
+          &quot;imported class&quot;
+        ],
+        &quot;pat&quot;: [
+          &quot;REF&quot;,
+          1
+        ]
+      },
+      &quot;ordered_globals&quot;: [
+        &quot;Staff601&quot;,
+        &quot;pat&quot;
+      ],
+      &quot;stack_to_render&quot;: [],
+      &quot;heap&quot;: {
+        &quot;1&quot;: [
+          &quot;INSTANCE&quot;,
+          &quot;Staff601&quot;,
+          [
+            &quot;age&quot;,
+            60
+          ],
+          [
+            &quot;name&quot;,
+            &quot;Pat&quot;
+          ],
+          [
+            &quot;role&quot;,
+            &quot;Professor&quot;
+          ],
+          [
+            &quot;salary&quot;,
+            100000
+          ]
+        ]
+      },
+      &quot;stdout&quot;: &quot;# The __init__ 'constructor' - object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def __init__(self, name, role, years, salary):\n      self.name = name\n      self.role = role\n      self.age = years\n      self.salary = salary\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Staff601('Pat', 'Professor', 60, 100000)\nprint(pat.salutation())\n&quot;
+    },
+    {
+      &quot;line&quot;: 16,
+      &quot;event&quot;: &quot;call&quot;,
+      &quot;func_name&quot;: &quot;salutation&quot;,
+      &quot;globals&quot;: {
+        &quot;Staff601&quot;: [
+          &quot;IMPORTED_FAUX_PRIMITIVE&quot;,
+          &quot;imported class&quot;
+        ],
+        &quot;pat&quot;: [
+          &quot;REF&quot;,
+          1
+        ]
+      },
+      &quot;ordered_globals&quot;: [
+        &quot;Staff601&quot;,
+        &quot;pat&quot;
+      ],
+      &quot;stack_to_render&quot;: [
+        {
+          &quot;func_name&quot;: &quot;salutation&quot;,
+          &quot;is_parent&quot;: false,
+          &quot;frame_id&quot;: 2,
+          &quot;parent_frame_id_list&quot;: [],
+          &quot;encoded_locals&quot;: {
+            &quot;self&quot;: [
+              &quot;REF&quot;,
+              1
+            ]
+          },
+          &quot;ordered_varnames&quot;: [
+            &quot;self&quot;
+          ],
+          &quot;is_zombie&quot;: false,
+          &quot;is_highlighted&quot;: true,
+          &quot;unique_hash&quot;: &quot;salutation_f2&quot;
+        }
+      ],
+      &quot;heap&quot;: {
+        &quot;1&quot;: [
+          &quot;INSTANCE&quot;,
+          &quot;Staff601&quot;,
+          [
+            &quot;age&quot;,
+            60
+          ],
+          [
+            &quot;name&quot;,
+            &quot;Pat&quot;
+          ],
+          [
+            &quot;role&quot;,
+            &quot;Professor&quot;
+          ],
+          [
+            &quot;salary&quot;,
+            100000
+          ]
+        ]
+      },
+      &quot;stdout&quot;: &quot;# The __init__ 'constructor' - object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def __init__(self, name, role, years, salary):\n      self.name = name\n      self.role = role\n      self.age = years\n      self.salary = salary\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Staff601('Pat', 'Professor', 60, 100000)\nprint(pat.salutation())\n&quot;
+    },
+    {
+      &quot;line&quot;: 17,
+      &quot;event&quot;: &quot;step_line&quot;,
+      &quot;func_name&quot;: &quot;salutation&quot;,
+      &quot;globals&quot;: {
+        &quot;Staff601&quot;: [
+          &quot;IMPORTED_FAUX_PRIMITIVE&quot;,
+          &quot;imported class&quot;
+        ],
+        &quot;pat&quot;: [
+          &quot;REF&quot;,
+          1
+        ]
+      },
+      &quot;ordered_globals&quot;: [
+        &quot;Staff601&quot;,
+        &quot;pat&quot;
+      ],
+      &quot;stack_to_render&quot;: [
+        {
+          &quot;func_name&quot;: &quot;salutation&quot;,
+          &quot;is_parent&quot;: false,
+          &quot;frame_id&quot;: 2,
+          &quot;parent_frame_id_list&quot;: [],
+          &quot;encoded_locals&quot;: {
+            &quot;self&quot;: [
+              &quot;REF&quot;,
+              1
+            ]
+          },
+          &quot;ordered_varnames&quot;: [
+            &quot;self&quot;
+          ],
+          &quot;is_zombie&quot;: false,
+          &quot;is_highlighted&quot;: true,
+          &quot;unique_hash&quot;: &quot;salutation_f2&quot;
+        }
+      ],
+      &quot;heap&quot;: {
+        &quot;1&quot;: [
+          &quot;INSTANCE&quot;,
+          &quot;Staff601&quot;,
+          [
+            &quot;age&quot;,
+            60
+          ],
+          [
+            &quot;name&quot;,
+            &quot;Pat&quot;
+          ],
+          [
+            &quot;role&quot;,
+            &quot;Professor&quot;
+          ],
+          [
+            &quot;salary&quot;,
+            100000
+          ]
+        ]
+      },
+      &quot;stdout&quot;: &quot;# The __init__ 'constructor' - object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def __init__(self, name, role, years, salary):\n      self.name = name\n      self.role = role\n      self.age = years\n      self.salary = salary\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Staff601('Pat', 'Professor', 60, 100000)\nprint(pat.salutation())\n&quot;
+    },
+    {
+      &quot;line&quot;: 17,
+      &quot;event&quot;: &quot;return&quot;,
+      &quot;func_name&quot;: &quot;salutation&quot;,
+      &quot;globals&quot;: {
+        &quot;Staff601&quot;: [
+          &quot;IMPORTED_FAUX_PRIMITIVE&quot;,
+          &quot;imported class&quot;
+        ],
+        &quot;pat&quot;: [
+          &quot;REF&quot;,
+          1
+        ]
+      },
+      &quot;ordered_globals&quot;: [
+        &quot;Staff601&quot;,
+        &quot;pat&quot;
+      ],
+      &quot;stack_to_render&quot;: [
+        {
+          &quot;func_name&quot;: &quot;salutation&quot;,
+          &quot;is_parent&quot;: false,
+          &quot;frame_id&quot;: 2,
+          &quot;parent_frame_id_list&quot;: [],
+          &quot;encoded_locals&quot;: {
+            &quot;self&quot;: [
+              &quot;REF&quot;,
+              1
+            ],
+            &quot;__return__&quot;: &quot;Professor Pat&quot;
+          },
+          &quot;ordered_varnames&quot;: [
+            &quot;self&quot;,
+            &quot;__return__&quot;
+          ],
+          &quot;is_zombie&quot;: false,
+          &quot;is_highlighted&quot;: true,
+          &quot;unique_hash&quot;: &quot;salutation_f2&quot;
+        }
+      ],
+      &quot;heap&quot;: {
+        &quot;1&quot;: [
+          &quot;INSTANCE&quot;,
+          &quot;Staff601&quot;,
+          [
+            &quot;age&quot;,
+            60
+          ],
+          [
+            &quot;name&quot;,
+            &quot;Pat&quot;
+          ],
+          [
+            &quot;role&quot;,
+            &quot;Professor&quot;
+          ],
+          [
+            &quot;salary&quot;,
+            100000
+          ]
+        ]
+      },
+      &quot;stdout&quot;: &quot;# The __init__ 'constructor' - object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def __init__(self, name, role, years, salary):\n      self.name = name\n      self.role = role\n      self.age = years\n      self.salary = salary\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Staff601('Pat', 'Professor', 60, 100000)\nprint(pat.salutation())\n&quot;
+    },
+    {
+      &quot;line&quot;: 20,
+      &quot;event&quot;: &quot;return&quot;,
+      &quot;func_name&quot;: &quot;&lt;module&gt;&quot;,
+      &quot;globals&quot;: {
+        &quot;Staff601&quot;: [
+          &quot;IMPORTED_FAUX_PRIMITIVE&quot;,
+          &quot;imported class&quot;
+        ],
+        &quot;pat&quot;: [
+          &quot;REF&quot;,
+          1
+        ]
+      },
+      &quot;ordered_globals&quot;: [
+        &quot;Staff601&quot;,
+        &quot;pat&quot;
+      ],
+      &quot;stack_to_render&quot;: [],
+      &quot;heap&quot;: {
+        &quot;1&quot;: [
+          &quot;INSTANCE&quot;,
+          &quot;Staff601&quot;,
+          [
+            &quot;age&quot;,
+            60
+          ],
+          [
+            &quot;name&quot;,
+            &quot;Pat&quot;
+          ],
+          [
+            &quot;role&quot;,
+            &quot;Professor&quot;
+          ],
+          [
+            &quot;salary&quot;,
+            100000
+          ]
+        ]
+      },
+      &quot;stdout&quot;: &quot;# The __init__ 'constructor' - object-oriented programming intro\n# Adapted from MIT 6.01 course notes (Section 3.5)\n# http://mit.edu/6.01/mercurial/spring10/www/handouts/readings.pdf\n\nclass Staff601:\n    course = '6.01'\n    building = 34\n    room = 501\n\n    def __init__(self, name, role, years, salary):\n      self.name = name\n      self.role = role\n      self.age = years\n      self.salary = salary\n\n    def salutation(self):\n        return self.role + ' ' + self.name\n\npat = Staff601('Pat', 'Professor', 60, 100000)\nprint(pat.salutation())\nProfessor Pat\n&quot;
+    }
+  ]
+}
+</code></pre>
 <h2 id="参考资料"><a class="header" href="#参考资料">参考资料</a></h2>
 <ul>
 <li><a href="https://github.com/KuanHsiaoKuo/OnlinePythonTutor">KuanHsiaoKuo/OnlinePythonTutor</a></li>
 <li><a href="https://github.com/KuanHsiaoKuo/PythonTutorService">KuanHsiaoKuo/PythonTutorService: 基于OnlinePythonTutor开源项目进行改写</a></li>
 <li><a href="/layer1_underlying_abstract/3_language_grammar/code_quality.html">bdb与pdb介绍</a></li>
+<li><a href="https://web.archive.org/web/20220701012126/http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.463.9294&amp;rep=rep1&amp;type=pdf">Online Python Tutor- Embeddable Web-Based Program Visualization for CS Education.pdf</a>
+<blockquote>
+<p><a href="x-devonthink-item://6C44A26B-F75A-414F-830E-B8F96CD5A32B">local dt</a></p>
+</blockquote>
+</li>
+<li><a href="https://www.connectedpapers.com/main/641cb912e58c54e8c8e1a741c2df8d5341a4a487/Online-python-tutor:-embeddable-web%20based-program-visualization-for-cs-education/graph">Online python tutor: embeddable web-based program visualization for cs education</a></li>
+<li><a href="https://pythontutor.com/visualize.html#mode=edit">Python Tutor code visualizer: Visualize code in Python, JavaScript, C, C++, and Java</a></li>
 </ul>
 
             </main>
