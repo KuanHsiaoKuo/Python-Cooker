@@ -1,6 +1,14 @@
 # 内置库介绍
 
 <!--ts-->
+* [内置库介绍](#内置库介绍)
+   * [os库](#os库)
+      * [环境变量设置及妙用](#环境变量设置及妙用)
+* [参考资源](#参考资源)
+
+<!-- Created by https://github.com/ekalinin/github-markdown-toc -->
+<!-- Added by: kuanhsiaokuo, at: Thu Jul  7 10:15:09 CST 2022 -->
+
 <!--te-->
 
 ## os库
