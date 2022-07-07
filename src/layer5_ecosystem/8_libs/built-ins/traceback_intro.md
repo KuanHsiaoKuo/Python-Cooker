@@ -1,6 +1,13 @@
 # 异常追踪库
 
 <!--ts-->
+* [异常追踪库](#异常追踪库)
+   * [基础例子](#基础例子)
+   * [参考资源](#参考资源)
+
+<!-- Created by https://github.com/ekalinin/github-markdown-toc -->
+<!-- Added by: kuanhsiaokuo, at: Thu Jul  7 14:14:58 CST 2022 -->
+
 <!--te-->
 ## 基础例子
 ~~~admonish info title='结合日志使用'
