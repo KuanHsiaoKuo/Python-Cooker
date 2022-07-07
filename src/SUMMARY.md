@@ -59,6 +59,7 @@
         - [生产实践](layer5_ecosystem/7_business/practices/practices.md)
         - [优秀产品](layer5_ecosystem/7_business/products/products.md)
     - [基础库](layer5_ecosystem/8_libs/libs.md)
+        - [内置库](layer5_ecosystem/8_libs/built-in.md)
     - [框架引擎](layer5_ecosystem/9_frameworks/frameworks.md)
 
 

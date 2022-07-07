@@ -221,3 +221,4 @@ if __name__ == "__main__":
     > [local dt](x-devonthink-item://6C44A26B-F75A-414F-830E-B8F96CD5A32B)
 - [Online python tutor: embeddable web-based program visualization for cs education](https://www.connectedpapers.com/main/641cb912e58c54e8c8e1a741c2df8d5341a4a487/Online-python-tutor:-embeddable-web%20based-program-visualization-for-cs-education/graph)
 - [Python Tutor code visualizer: Visualize code in Python, JavaScript, C, C++, and Java](https://pythontutor.com/visualize.html#mode=edit)
+- [pathrise-python-tutor/embedding-HOWTO.md at master · pathrise-eng/pathrise-python-tutor](https://github.com/pathrise-eng/pathrise-python-tutor/blob/master/v3/docs/embedding-HOWTO.md)
