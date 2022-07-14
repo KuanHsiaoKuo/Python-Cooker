@@ -1,6 +1,30 @@
 # Python模块系统
 
 <!--ts-->
+* [Python模块系统](#python模块系统)
+   * [package-&gt;module-&gt;method](#package-module-method)
+      * [package](#package)
+      * [module](#module)
+      * [method](#method)
+   * [模块的用意：分割与导入](#模块的用意分割与导入)
+* [参考资源](#参考资源)
+   * [<a href="https://docs.python.org/zh-cn/3/tutorial/modules.html" rel="nofollow">6. 模块 — Python 3.10.5 文档</a>](#6-模块--python-3105-文档)
+   * [<a href="https://docs.python.org/zh-cn/3/reference/import.html" rel="nofollow">5. 导入系统 — Python 3.10.5 文档</a>](#5-导入系统--python-3105-文档)
+      * [调用导入机制的方式](#调用导入机制的方式)
+      * [导入模块发生了什么](#导入模块发生了什么)
+      * [python的模块](#python的模块)
+      * [python的包](#python的包)
+      * [对比联系包和模块](#对比联系包和模块)
+      * [包的分类](#包的分类)
+         * [常规包](#常规包)
+         * [命名空间包](#命名空间包)
+      * [搜索](#搜索)
+      * [加载](#加载)
+      * [相对导入](#相对导入)
+
+<!-- Created by https://github.com/ekalinin/github-markdown-toc -->
+<!-- Added by: runner, at: Thu Jul 14 06:52:33 UTC 2022 -->
+
 <!--te-->
 
 ## package->module->method
