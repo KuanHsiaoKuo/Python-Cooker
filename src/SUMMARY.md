@@ -18,6 +18,7 @@
         - [泛型编程](./layer2_design_abstract/4_programming_paradigm/gp.md)
     - [设计模式](./layer2_design_abstract/5_design_pattern/5_design_pattern.md)
     - [模块管理](./layer2_design_abstract/6_module_manage/6_module_manage.md)
+        - [模块系统](./layer2_design_abstract/6_module_manage/module_system.md)
 - [Layer3: 任务抽象](./layer3_task_abstract/layer3_task_abstract.md)
     - [并发编程](./layer3_task_abstract/7_concurrency/7_concurrency.md)
         - [系统IO模型](./layer3_task_abstract/7_concurrency/io_models.md)
