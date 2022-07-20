@@ -1,19 +1,18 @@
 # 代码质量：异常、测试与日志
 
 <!--ts-->
-
 * [代码质量：异常、测试与日志](#代码质量异常测试与日志)
-    * [调试：bdb与pdb](#调试bdb与pdb)
-        * [Python标准库中的Debugger框架bdb模块](#python标准库中的debugger框架bdb模块)
-            * [bdb模块的组成：](#bdb模块的组成)
-        * [Python Debugger调试器](#python-debugger调试器)
-            * [pdb模块中的Pdb类](#pdb模块中的pdb类)
-            * [启动调试的方式](#启动调试的方式)
-            * [调试命令](#调试命令)
-    * [参考资源：](#参考资源)
+   * [调试：bdb与pdb](#调试bdb与pdb)
+      * [Python标准库中的Debugger框架bdb模块](#python标准库中的debugger框架bdb模块)
+         * [bdb模块的组成：](#bdb模块的组成)
+      * [Python Debugger调试器](#python-debugger调试器)
+         * [pdb模块中的Pdb类](#pdb模块中的pdb类)
+         * [启动调试的方式](#启动调试的方式)
+         * [调试命令](#调试命令)
+   * [参考资源：](#参考资源)
 
 <!-- Created by https://github.com/ekalinin/github-markdown-toc -->
-<!-- Added by: runner, at: Sat Jul 16 09:37:37 UTC 2022 -->
+<!-- Added by: runner, at: Wed Jul 20 03:35:05 UTC 2022 -->
 
 <!--te-->
 
