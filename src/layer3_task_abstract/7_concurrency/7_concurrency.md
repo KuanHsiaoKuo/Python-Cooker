@@ -1,11 +1,12 @@
 # 并发
 
 <!--ts-->
+
 * [并发](#并发)
-   * [参考资源](#参考资源)
-      * [online-book](#online-book)
-      * [fragment](#fragment)
-      * [local](#local)
+    * [参考资源](#参考资源)
+        * [online-book](#online-book)
+        * [fragment](#fragment)
+        * [local](#local)
 
 <!-- Created by https://github.com/ekalinin/github-markdown-toc -->
 <!-- Added by: runner, at: Thu Jul 14 06:52:34 UTC 2022 -->
@@ -17,5 +18,7 @@
 ### online-book
 
 ### fragment
+
+- [Python并发方案深度对比](https://web.archive.org/web/20220720030659/https://mp.weixin.qq.com/s/AhxqHpbzV4J9sySSSXk_hg)
 
 ### local

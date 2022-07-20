@@ -1,15 +1,16 @@
 # 代码质量：异常、测试与日志
 
 <!--ts-->
+
 * [代码质量：异常、测试与日志](#代码质量异常测试与日志)
-   * [调试：bdb与pdb](#调试bdb与pdb)
-      * [Python标准库中的Debugger框架bdb模块](#python标准库中的debugger框架bdb模块)
-         * [bdb模块的组成：](#bdb模块的组成)
-      * [Python Debugger调试器](#python-debugger调试器)
-         * [pdb模块中的Pdb类](#pdb模块中的pdb类)
-         * [启动调试的方式](#启动调试的方式)
-         * [调试命令](#调试命令)
-   * [参考资源：](#参考资源)
+    * [调试：bdb与pdb](#调试bdb与pdb)
+        * [Python标准库中的Debugger框架bdb模块](#python标准库中的debugger框架bdb模块)
+            * [bdb模块的组成：](#bdb模块的组成)
+        * [Python Debugger调试器](#python-debugger调试器)
+            * [pdb模块中的Pdb类](#pdb模块中的pdb类)
+            * [启动调试的方式](#启动调试的方式)
+            * [调试命令](#调试命令)
+    * [参考资源：](#参考资源)
 
 <!-- Created by https://github.com/ekalinin/github-markdown-toc -->
 <!-- Added by: runner, at: Thu Jul 14 06:52:30 UTC 2022 -->
@@ -121,3 +122,4 @@ pdb.pm()
 - [pdb — The Python Debugger — Python 3.10.5 documentation](https://docs.python.org/3/library/pdb.html)
 - [cpython/pdb.py at 3.5 · python/cpython](https://github.com/python/cpython/blob/3.5/Lib/pdb.py)
 - [cpython/bdb.py at 3.5 · python/cpython](https://github.com/python/cpython/blob/3.5/Lib/bdb.py)
+- [Python的异常信息还能这样展现](https://web.archive.org/web/20220720030704/https://mp.weixin.qq.com/s/eW3VtEUXM7nGKCpPmY9FUw)
